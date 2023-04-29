@@ -26,4 +26,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy on AWS EKS
-        run: echo I am $NAME this for user $USERNAME and ${{ secret.MY_SECRET_NAME }}
+        run: echo I am $NAME this for user $USERNAME and ${{ secrets.MY_SECRET_NAME }}
