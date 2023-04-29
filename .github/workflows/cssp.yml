@@ -20,8 +20,8 @@ jobs:
 
       - name: Create docker image
         run: |
-          docker build -t cssp:${{ DOCKER_IMAGE_VERSION }} .
-          docker tag cssp:$DOCKER_IMAGE_VERSION ${{ env.ECR_REGISTRY }}:${{ env.DOCKER_IMAGE_VERSION }}
+          docker build -t cssp:${{ env.DOCKER_IMAGE_VERSION }} .
+          docker tag cssp:${{ env.DOCKER_IMAGE_VERSION }} ${{ env.ECR_REGISTRY }}:${{ env.DOCKER_IMAGE_VERSION }}
 
       - name: Configure AWS credentials 
         uses: aws-actions/configure-aws-credentials@v1 
@@ -38,4 +38,4 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Push Docker image to AWS ECR 
-        run: docker push ${{ env.ECR_REGISTRY }}:$DOCKER_IMAGE_VERSION
+        run: docker push ${{ env.ECR_REGISTRY }}:${{ env.DOCKER_IMAGE_VERSION }}
