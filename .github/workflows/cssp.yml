@@ -1,10 +1,16 @@
-name: CI
+name: Working on Github Action
+
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+  
+env:
+  NAME: testing
+  USERNAME: somnath
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,4 +26,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy on AWS EKS
-        run: echo Deploying on AWS EKS
+        run: echo I am $NAME this for user $USERNAME
