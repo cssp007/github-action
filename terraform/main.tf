@@ -122,7 +122,6 @@ resource "aws_instance" "sonarQ_instance" {
   echo "[Unit]
   Description=SonarQube service
   After=syslog.target network.target
-
   [Service]
   Type=forking
   ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
@@ -132,7 +131,6 @@ resource "aws_instance" "sonarQ_instance" {
   User=sonarh2s
   Group=sonarh2s
   Restart=on-failure
-
   [Install]
   WantedBy=multi-user.target" >> sonar.service
   sudo mv sonar.service /etc/systemd/system/
