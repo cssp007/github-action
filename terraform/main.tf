@@ -120,21 +120,21 @@ resource "aws_instance" "sonarQ_instance" {
   sudo mv /tmp/sonarqube /opt/sonarqube
   sudo chown -R sonarh2s:sonarh2s /opt/sonarqube
   echo "[Unit]
-Description=SonarQube service
-After=syslog.target network.target
+  Description=SonarQube service
+  After=syslog.target network.target
 
-[Service]
-Type=forking
-ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
-ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
-LimitNOFILE=65536
-LimitNPROC=4096
-User=sonarh2s
-Group=sonarh2s
-Restart=on-failure
+  [Service]
+  Type=forking
+  ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+  ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+  LimitNOFILE=65536
+  LimitNPROC=4096
+  User=sonarh2s
+  Group=sonarh2s
+  Restart=on-failure
 
-[Install]
-WantedBy=multi-user.target" >> sonar.service
+  [Install]
+  WantedBy=multi-user.target" >> sonar.service
   sudo mv sonar.service /etc/systemd/system/
   sudo systemctl daemon-reload
   sudo systemctl enable sonar
