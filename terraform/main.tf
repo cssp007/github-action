@@ -90,37 +90,6 @@ resource "aws_instance" "sonarQ_instance" {
   vpc_security_group_ids      = [aws_security_group.sonarQ_sg.id]
   associate_public_ip_address = true
 
-  user_data = <<-EOF
-  #!/bin/bash -ex
-
-  sudo apt update -y
-  sudo apt install -y openjdk-11-jdk
-  sudo sysctl -w vm.max_map_count=524288
-  sudo sysctl -w fs.file-max=131072
-  ulimit -n 131072
-  ulimit -u 8192
-  sudo adduser --system --no-create-home --group --disabled-login sonarh2s
-  
-  wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O- | sudo apt-key add -
-  echo "deb [arch=amd64] http://apt.postgresql.org/pub/repos/apt/ focal-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql.list
-  sudo apt update -y
-  sudo apt install -y postgresql-13
-  sudo su - postgres
-  createuser sonaruser
-  psql -U postgres -c "ALTER USER sonaruser WITH ENCRYPTED password 'Cssp@143';"
-  psql -U postgres -c "CREATE DATABASE sonardb OWNER sonaruser;"
-  
-  wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.0.1.46107.zip
-  sudo apt -y install unzip
-  unzip sonarqube-*.zip -d /tmp
-  mv /tmp/sonarqube-* /tmp/sonarqube
-  echo "sonar.jdbc.username=sonaruser" >> /tmp/sonarqube/conf/sonar.properties
-  echo "sonar.jdbc.password=Cssp@143" >> /tmp/sonarqube/conf/sonar.properties
-  echo "sonar.jdbc.url=jdbc:postgresql://localhost/sonardb" >> /tmp/sonarqube/conf/sonar.properties
-  sudo mv /tmp/sonarqube /opt/sonarqube
-  sudo chown -R sonarh2s:sonarh2s /opt/sonarqube
-  EOF
-
   tags = {
     "Name" : "SonarQ Server"
   }
