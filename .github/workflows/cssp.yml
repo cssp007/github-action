@@ -18,6 +18,7 @@ env:
   AWS_REGION: ap-south-1
   DOCKER_IMAGE_VERSION: ${{ github.run_number }}
   ECR_REGISTRY: 697629728038.dkr.ecr.ap-south-1.amazonaws.com/cssp
+  SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
   
 jobs:
   build:
