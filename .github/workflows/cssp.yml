@@ -7,12 +7,25 @@ env:
   AWS_REGION: ap-south-1
   DOCKER_IMAGE_VERSION: ${{ github.run_number }}
   ECR_REGISTRY: 697629728038.dkr.ecr.ap-south-1.amazonaws.com/cssp
+  SERVICE_NAME: AWS-ECR
   
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Build start notification
+        id: slack
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          # This data can be any valid JSON from a previous step in the GitHub Action
+          payload: |
+           {
+             "text": "Starting build for the `${{env.SERVICE_NAME}}` with version `${{env.DOCKER_IMAGE_VERSION}}` \n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+           }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Create docker image
         run: |
