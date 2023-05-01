@@ -13,7 +13,7 @@ jobs:
       pull-requests: write
     uses: cssp007/github-action/.github/workflows/cssp.yml@main
     with:
-      SERVICE_NAME: ${{ env.SERVICE_NAME }}
+      SERVICE_NAME: $SERVICE_NAME
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
