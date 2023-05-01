@@ -119,24 +119,6 @@ resource "aws_instance" "sonarQ_instance" {
   echo "sonar.jdbc.url=jdbc:postgresql://localhost/sonardb" >> /tmp/sonarqube/conf/sonar.properties
   sudo mv /tmp/sonarqube /opt/sonarqube
   sudo chown -R sonarh2s:sonarh2s /opt/sonarqube
-  echo "[Unit]
-  Description=SonarQube service
-  After=syslog.target network.target
-  [Service]
-  Type=forking
-  ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
-  ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
-  LimitNOFILE=65536
-  LimitNPROC=4096
-  User=sonarh2s
-  Group=sonarh2s
-  Restart=on-failure
-  [Install]
-  WantedBy=multi-user.target" >> sonar.service
-  sudo mv sonar.service /etc/systemd/system/
-  sudo systemctl daemon-reload
-  sudo systemctl enable sonar
-  sudo systemctl start sonar
   EOF
 
   tags = {
