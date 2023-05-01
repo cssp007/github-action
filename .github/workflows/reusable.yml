@@ -1,0 +1,17 @@
+name: Call a reusable workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  call-workflow-passing-data:
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: cssp007/github-action/.github/workflows/cssp.yml@main
+    with:
+      SERVICE_NAME: CSSP
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
