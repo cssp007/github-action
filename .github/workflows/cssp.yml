@@ -1,13 +1,19 @@
 name: AWS ECR Workflow
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      SERVICE_NAME:
+        required: true
+        type: string
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
   
 env:
   AWS_REGION: ap-south-1
   DOCKER_IMAGE_VERSION: ${{ github.run_number }}
   ECR_REGISTRY: 697629728038.dkr.ecr.ap-south-1.amazonaws.com/cssp
-  SERVICE_NAME: AWS-ECR
   
 jobs:
   build:
