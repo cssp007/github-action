@@ -1,0 +1,40 @@
+name: Cord Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source ~/.cargo/env
+          rustup default stable
+          rustup update
+          rustup update nightly
+          rustup target add wasm32-unknown-unknown --toolchain nightly
+          sudo apt update
+          sudo apt install -y git clang curl libssl-dev llvm libudev-dev pkg-config
+          sudo apt install --assume-yes build-essential git clang curl libssl-dev llvm libudev-dev make protobuf-compiler
+
+          git clone https://github.com/dhiway/cord
+          cd cord
+          cargo build --release
+
+          key_details=$(./target/release/cord key generate -n cord --words 24 --scheme Sr25519)
+          secret_seed=$(echo $key_details | grep "secret seed")
+
+          ./scripts/bootstrap.sh -m 8 -n 8 -a 3 -o scripts -s "$secret_seed"
+          sed -i 's/chain_type =/chain_type = live/g' scripts/config.toml
+
+          ./target/release/cord bootstrap-chain --config ./scripts/config.toml > scripts/sparknet-spec.json
+
+          ./target/release/cord build-spec --raw --chain ./scripts/sparknet-spec.json > ./scripts/sparknet-raw-spec.json
