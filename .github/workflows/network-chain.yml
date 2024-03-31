@@ -25,6 +25,8 @@ jobs:
           sudo apt install -y git clang curl libssl-dev llvm libudev-dev pkg-config
           sudo apt install --assume-yes build-essential git clang curl libssl-dev llvm libudev-dev make protobuf-compiler
 
+      - name: Build the binary and create the keys
+        run: |
           git clone https://github.com/dhiway/cord
           cd cord
           cargo build --release
