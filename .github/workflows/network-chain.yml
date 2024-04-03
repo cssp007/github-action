@@ -34,7 +34,6 @@ jobs:
           sudo apt update
           sudo apt install -y git clang curl libssl-dev llvm libudev-dev pkg-config
           sudo apt install --assume-yes build-essential git clang curl libssl-dev llvm libudev-dev make protobuf-compiler
-          sudo apt install -y docker.io
 
       - name: Build the binary and create the keys
         run: |
@@ -49,8 +48,13 @@ jobs:
           ./target/release/cord build-spec --raw --chain ./scripts/$SPEC_FOLDER_NAME-spec.json > ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
           cat ./scripts/config.toml
           ls -la ./scripts/
-      - name: Create docker image
-        run: |
-          sudo docker build -t $SPEC_FOLDER_NAME:$CURRENT_DATETIME -f Dockerfile-validator-1
-          docker images
+          cd ..
+          
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile-validator-1
+          push: false  # Set this to true if you want to push the built image to a Docker registry
+          tags: SPEC_FOLDER_NAME:CURRENT_DATETIME
           
