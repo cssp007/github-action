@@ -30,13 +30,13 @@ jobs:
           git clone https://github.com/dhiway/cord
           cd cord
           cargo build --release
-
-          key_details=$(./target/release/cord key generate -n cord --words 24 --scheme Sr25519)
-          secret_seed=$(echo $key_details | grep "secret seed")
-
-          ./scripts/bootstrap.sh -m 8 -n 8 -a 3 -o scripts -s "$secret_seed"
-          sed -i 's/chain_type =/chain_type = live/g' scripts/config.toml
-
-          ./target/release/cord bootstrap-chain --config ./scripts/config.toml > scripts/sparknet-spec.json
-
-          ./target/release/cord build-spec --raw --chain ./scripts/sparknet-spec.json > ./scripts/sparknet-raw-spec.json
+#
+#          key_details=$(./target/release/cord key generate -n cord --words 24 --scheme Sr25519)
+#          secret_seed=$(echo $key_details | grep "secret seed")
+#
+#          ./scripts/bootstrap.sh -m 8 -n 8 -a 3 -o scripts -s "$secret_seed"
+#          sed -i 's/chain_type =/chain_type = live/g' scripts/config.toml
+#
+#          ./target/release/cord bootstrap-chain --config ./scripts/config.toml > scripts/sparknet-spec.json
+#
+#          ./target/release/cord build-spec --raw --chain ./scripts/sparknet-spec.json > ./scripts/sparknet-raw-spec.json
