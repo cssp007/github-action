@@ -30,9 +30,9 @@ jobs:
           git clone https://github.com/dhiway/cord
           cd cord
           cargo build --release
-          SEED_KEY=$(/home/runner/work/github-action/github-action/cord/target/release/cord key generate -n cord --words 24 --scheme Sr25519 | grep "Secret seed" | awk '{print $3}')
-          cat $SEED_KEY
-          /home/runner/work/github-action/github-action/cord/scripts/bootstrap.sh -m 8 -n 8 -a 3 -o scripts -s "$SEED_KEY"
+          ./target/release/cord key generate -n cord --words 24 --scheme Sr25519
+          SEED_KEY=$(./target/release/cord key generate -n cord --words 24 --scheme Sr25519 | grep "Secret seed" | awk '{print $3}')
+          ./scripts/bootstrap.sh -m 8 -n 8 -a 3 -o scripts -s "$SEED_KEY"
           ls -lh /home/runner/work/github-action/github-action/cord/scripts/
 #
 #          key_details=$(./target/release/cord key generate -n cord --words 24 --scheme Sr25519)
