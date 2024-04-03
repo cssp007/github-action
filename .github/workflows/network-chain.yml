@@ -35,7 +35,7 @@ jobs:
           cargo build --release
           SEED_KEY=$(./target/release/cord key generate -n cord --words 24 --scheme Sr25519 | grep "Secret seed" | awk '{print $3}')
           ./scripts/bootstrap.sh -m 8 -n 8 -a 3 -o scripts -s "$SEED_KEY"
-          sed -i 's/chain_name = "CORD Custom Chain"/chain_name = $CHAIN_NAME/g' scripts/config.toml
+          sed -i 's/chain_name = "CORD Custom Chain"/chain_name = "$CHAIN_NAME"/g' scripts/config.toml
           sed -i 's/chain_type = "local"/chain_type = "live"/g' scripts/config.toml
           ./target/release/cord bootstrap-chain --config ./scripts/config.toml > ./scripts/$CHAIN_NAME-spec.json
           ./target/release/cord build-spec --raw --chain ./scripts/cssp-spec.json > ./scripts/$CHAIN_NAME-raw-spec.json
