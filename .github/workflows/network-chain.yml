@@ -54,17 +54,6 @@ jobs:
       - name: Set tag name
         id: set_tag
         run: echo "::set-output name=tag_name::$(echo $SPEC_FOLDER_NAME | tr -cd '[:alnum:]._-' | cut -c 1-128)"
-
-      - name: Configure Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          service_account_key: ${{ secrets.GCP_SA_GKE }}
-          project_id: cssp-dhiway
-          export_default_credentials: true
-
-      - name: Configure Docker Client
-        run: |-
-          gcloud auth configure-docker --quiet
     
       - name: Build Docker image
         uses: docker/build-push-action@v2
