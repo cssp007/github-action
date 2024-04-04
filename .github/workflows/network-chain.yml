@@ -57,5 +57,5 @@ jobs:
           context: .
           file: Dockerfile-validator-1
           push: false
-          tags: $SPEC_FOLDER_NAME:$CURRENT_DATETIME
+          tags: $SPEC_FOLDER_NAME
           
