@@ -1,5 +1,4 @@
 FROM dhiway/cord:develop
-RUN mkdir /cord && chmod 777 /cord
 COPY ./cord/scripts/node1.key /cord/
 COPY ./cord/scripts/accounts.txt /cord/
 COPY ./cord/scripts/cssp-raw-spec.json /cord/
