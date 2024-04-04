@@ -56,10 +56,11 @@ jobs:
         run: echo "::set-output name=tag_name::$(echo $SPEC_FOLDER_NAME | tr -cd '[:alnum:]._-' | cut -c 1-128)"
 
       - name: Configure Google Cloud SDK
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v1
+        uses: google-github-actions/setup-gcloud@master
         with:
-          version: 'latest'
+          project_id: cssp-dhiway
           service_account_key: ${{ secrets.GCP_SA_GKE }}
+          export_default_credentials: true
     
       - name: Build Docker image
         uses: docker/build-push-action@v2
