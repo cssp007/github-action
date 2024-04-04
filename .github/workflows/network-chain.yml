@@ -12,6 +12,7 @@ jobs:
     env:
       CHAIN_NAME: 'CSSP'
       SPEC_FOLDER_NAME: 'cssp'
+      
 
     steps:
       - name: Checkout code
@@ -55,6 +56,6 @@ jobs:
         with:
           context: .
           file: Dockerfile-validator-1
-          push: false  # Set this to true if you want to push the built image to a Docker registry
-          tags: SPEC_FOLDER_NAME:CURRENT_DATETIME
+          push: false
+          tags: $SPEC_FOLDER_NAME:$CURRENT_DATETIME
           
