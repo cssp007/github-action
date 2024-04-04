@@ -56,7 +56,7 @@ jobs:
         run: echo "::set-output name=tag_name::$(echo $SPEC_FOLDER_NAME | tr -cd '[:alnum:]._-' | cut -c 1-128)"
 
       - name: Configure Google Cloud SDK
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v1
         with:
           version: 'latest'
           service_account_key: ${{ secrets.GCP_SA_GKE }}
