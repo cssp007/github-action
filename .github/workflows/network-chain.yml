@@ -51,11 +51,19 @@ jobs:
           ls -la ./scripts/
           cd ..
           
+      - name: Set tag name
+        id: set_tag
+        run: echo "::set-output name=tag_name::$(echo $SPEC_FOLDER_NAME | tr -cd '[:alnum:]._-' | cut -c 1-128)"
+    
       - name: Build Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           file: Dockerfile-validator-1
           push: false
-          tags: $SPEC_FOLDER_NAME
+          tags: gcr.io/dhiway-cssp/${{ steps.set_tag.outputs.tag_name }}
+
+      - name: Check docker image details
+        run: |
+          sudo docker images
           
