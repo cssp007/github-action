@@ -72,7 +72,8 @@ jobs:
 
       - name: "Docker auth"
         run: |-
-          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+          gcloud auth configure-docker asia.gcr.io
+#          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
       - name: Build image
         run: docker build . --file Dockerfile-validator-1 --tag ${{ env.GAR_LOCATION }}
@@ -80,8 +81,9 @@ jobs:
 
       - name: Push image
         run: |-
-          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia-south1.pkg.dev
           docker push ${{ env.GAR_LOCATION }}
+#          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia-south1.pkg.dev
+          
         
 #      - name: Build Docker image
 #        uses: docker/build-push-action@v2
