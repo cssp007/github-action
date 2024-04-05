@@ -9,7 +9,7 @@ env:
   REGION: asia-south1
   PROJECT: cssp-dhiway
   REPO: main
-  IMAGE: demo-1
+  IMAGE: validator-1
   CHAIN_NAME: 'CSSP'
   SPEC_FOLDER_NAME: 'cssp'
   
@@ -73,4 +73,4 @@ jobs:
           context: .
           file: Dockerfile-validator-1
           push: true
-          tags: ${{ env.IMAGE_TAG }}
+          tags: ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}
