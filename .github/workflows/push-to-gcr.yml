@@ -83,9 +83,9 @@ jobs:
 
       - name: Authenticate with GKE Cluster
         run: gcloud container clusters get-credentials cssp --region asia-south1 --project cssp-dhiway
-             
+        
       - name: Deploy to GKE
         run: |
-#          sed -i 's/IMAGE_NAME/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}/g' validator.yml
           kubectl apply -f validator.yml
           kubectl get all
+#          sed -i 's/IMAGE_NAME/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}/g' validator.yml
