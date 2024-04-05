@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: validator-1
-        image: IMAGE_NAME
+        image: asia-south1-docker.pkg.dev/cssp-dhiway/main/validator-1:2024-05-04-09-30
         ports:
         - containerPort: 30333
