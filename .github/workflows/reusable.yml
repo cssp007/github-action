@@ -1,13 +1,13 @@
 name: Call a reusable workflow
 
 on:
-#  workflow_dispatch:
-  workflow_call:
-    inputs:
-      source_branch:
-        description: 'Source branch with SHA'
-        required: true
-        type: string
+  workflow_dispatch:
+#  workflow_call:
+#    inputs:
+#      source_branch:
+#        description: 'Source branch with SHA'
+#        required: true
+#        type: string
   
 env:
   SERVICE_NAME: CSSP
