@@ -29,32 +29,32 @@ jobs:
       - name: Set vars
         run: echo "IMAGE_TAG=$REGION-docker.pkg.dev/$PROJECT/$REPO/$IMAGE" >> $GITHUB_ENV
 
-      - name: Install dependencies
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source ~/.cargo/env
-          rustup default stable
-          rustup update
-          rustup update nightly
-          rustup target add wasm32-unknown-unknown --toolchain nightly
-          sudo apt update
-          sudo apt install -y git clang curl libssl-dev llvm libudev-dev pkg-config
-          sudo apt install --assume-yes build-essential git clang curl libssl-dev llvm libudev-dev make protobuf-compiler
+#      - name: Install dependencies
+#        run: |
+#          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+#          source ~/.cargo/env
+#          rustup default stable
+#          rustup update
+#          rustup update nightly
+#          rustup target add wasm32-unknown-unknown --toolchain nightly
+#          sudo apt update
+#          sudo apt install -y git clang curl libssl-dev llvm libudev-dev pkg-config
+#          sudo apt install --assume-yes build-essential git clang curl libssl-dev llvm libudev-dev make protobuf-compiler
 
-      - name: Build the binary and create the keys
-        run: |
-          git clone https://github.com/dhiway/cord
-          cd cord
-          cargo build --release
-          SEED_KEY=$(./target/release/cord key generate -n cord --words 24 --scheme Sr25519 | grep "Secret seed" | awk '{print $3}')
-          ./scripts/bootstrap.sh -m 8 -n 8 -a 3 -o scripts -s "$SEED_KEY"
-          sed -i 's/chain_name = "CORD Custom Chain"/chain_name = "'"$CHAIN_NAME"'"/g' ./scripts/config.toml
-          sed -i 's/chain_type = "local"/chain_type = "live"/g' scripts/config.toml
-          ./target/release/cord bootstrap-chain --config ./scripts/config.toml > ./scripts/$SPEC_FOLDER_NAME-spec.json
-          ./target/release/cord build-spec --raw --chain ./scripts/$SPEC_FOLDER_NAME-spec.json > ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
-          cat ./scripts/config.toml
-          ls -la ./scripts/
-          cd ..
+#      - name: Build the binary and create the keys
+#        run: |
+#          git clone https://github.com/dhiway/cord
+#          cd cord
+#          cargo build --release
+#          SEED_KEY=$(./target/release/cord key generate -n cord --words 24 --scheme Sr25519 | grep "Secret seed" | awk '{print $3}')
+#          ./scripts/bootstrap.sh -m 8 -n 8 -a 3 -o scripts -s "$SEED_KEY"
+#          sed -i 's/chain_name = "CORD Custom Chain"/chain_name = "'"$CHAIN_NAME"'"/g' ./scripts/config.toml
+#          sed -i 's/chain_type = "local"/chain_type = "live"/g' scripts/config.toml
+#          ./target/release/cord bootstrap-chain --config ./scripts/config.toml > ./scripts/$SPEC_FOLDER_NAME-spec.json
+#          ./target/release/cord build-spec --raw --chain ./scripts/$SPEC_FOLDER_NAME-spec.json > ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
+#          cat ./scripts/config.toml
+#          ls -la ./scripts/
+#          cd ..
         
       - name: Google Cloud Auth
         uses: google-github-actions/auth@v1
@@ -67,13 +67,13 @@ jobs:
       - name: Docker auth
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
         
-      - name: Build & push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile-validator-1
-          push: true
-          tags: ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}
+#      - name: Build & push
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          file: Dockerfile-validator-1
+#          push: true
+#          tags: ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}
 
       - name: Configure kubectl
         uses: azure/setup-kubectl@v1
@@ -86,6 +86,6 @@ jobs:
              
       - name: Deploy to GKE
         run: |
-          sed -i 's/IMAGE_NAME/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}/g' validator.yml
+#          sed -i 's/IMAGE_NAME/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}/g' validator.yml
           kubectl apply -f validator.yml
           kubectl get all
