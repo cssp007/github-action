@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: validator-1-deployment
+  labels:
+    app: validator-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: validator-1
+  template:
+    metadata:
+      labels:
+        app: validator-1
+    spec:
+      containers:
+      - name: validator-1
+        image: IMAGE_NAME
+        ports:
+        - containerPort: 30333
