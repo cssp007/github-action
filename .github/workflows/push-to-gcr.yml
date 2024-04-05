@@ -1,0 +1,41 @@
+name: Build and upload Docker image
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGION: asia-south1
+  PROJECT: cssp-dhiway
+  REPO: main
+  IMAGE: demo-1
+  
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+        
+      - name: Set vars
+        run: echo "IMAGE_TAG=$REGION-docker.pkg.dev/$PROJECT/$REPO/$IMAGE" >> $GITHUB_ENV
+        
+      - name: Google Cloud Auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: "${{ secrets.GCP_SA_GKE }}"
+         
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        
+      - name: Docker auth
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+        
+      - name: Build & push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile-validator-1
+          push: true
+          tags: ${{ env.IMAGE_TAG }}
