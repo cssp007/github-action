@@ -82,7 +82,9 @@ jobs:
           install-missing: true
 
       - name: Authenticate with GKE Cluster
-        run: gcloud container clusters get-credentials cssp --region asia-south1 --project cssp-dhiway
+        run: |-
+          gcloud auth list
+          gcloud container clusters get-credentials cssp --region asia-south1 --project cssp-dhiway
         
       - name: Deploy to GKE
         run: |
