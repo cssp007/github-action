@@ -1,1 +1,4 @@
 FROM dhiway/cord:develop
+COPY ./cord/scripts/node1.key /cord/
+COPY ./cord/scripts/accounts.txt /cord/
+COPY ./cord/scripts/cssp-raw-spec.json /cord/
