@@ -14,7 +14,7 @@ jobs:
       SPEC_FOLDER_NAME: 'cssp'
       PROJECT_ID: cssp-dhiway
       REGION: asia-south1
-      GAR_LOCATION: gcr.io/cssp-dhiway/cord:latest
+      GAR_LOCATION: gcr.io/cssp-dhiway/cord/validator:latest
       
 
     steps:
@@ -79,7 +79,9 @@ jobs:
         working-directory: .
 
       - name: Push image
-        run: docker push ${{ env.GAR_LOCATION }}
+        run: |
+          docker push ${{ env.GAR_LOCATION }}
+#          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia-south1.pkg.dev
         
 #      - name: Build Docker image
 #        uses: docker/build-push-action@v2
