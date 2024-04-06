@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: validator-1-deployment
+  name: DEPLOYMENT_NAME-deployment
   labels:
-    app: validator-1
+    app: DEPLOYMENT_NAME
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: validator-1
+      app: DEPLOYMENT_NAME
   template:
     metadata:
       labels:
-        app: validator-1
+        app: DEPLOYMENT_NAME
     spec:
       containers:
-      - name: validator-1
-        image: asia-south1-docker.pkg.dev/cssp-dhiway/main/validator-1:2024-05-04-09-30
+      - name: DEPLOYMENT_NAME
+        image: IMAGE_NAME
         ports:
         - containerPort: 30333
