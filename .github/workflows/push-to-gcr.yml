@@ -82,7 +82,7 @@ jobs:
         run: |
           if [ "$VALIDATOR" == "Yes" ]; then
             for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
-              docker build -t ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i --build-arg KEY=$i -f Dockerfile-validator-1
+              docker build -t ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i --build-arg KEY=$i .
               docker push ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i
             done;
           else
