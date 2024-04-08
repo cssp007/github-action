@@ -9,8 +9,8 @@ env:
   REGION: asia-south1
   PROJECT: cssp-dhiway
   REPO: main
-  IMAGE: validator-1
-  CHAIN_NAME: 'CSSP'
+  IMAGE: sparknet
+  CHAIN_NAME: 'Sparknet'
   SPEC_FOLDER_NAME: 'cssp'
   VALIDATOR: Yes
   NUMBER_OF_VALIDATOR_NODES: 3
@@ -19,9 +19,6 @@ env:
   
 jobs:
   build-push:
-#    strategy:
-#      matrix:
-#        username: [Somnath,Pandey]
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -32,10 +29,6 @@ jobs:
         run: |
           CURRENT_DATETIME=$(date +'%Y-%d-%m-%H-%M')
           echo "CURRENT_DATETIME=$CURRENT_DATETIME" >> $GITHUB_ENV
-      
-#      - name: Testing loop
-#        run: |-
-#          echo "Hello, ${{ matrix.username }}"
           
       - name: Set vars
         run: echo "IMAGE_TAG=$REGION-docker.pkg.dev/$PROJECT/$REPO/$IMAGE" >> $GITHUB_ENV
@@ -110,30 +103,8 @@ jobs:
         run: |
           if [ "$VALIDATOR" == "Yes" ]; then
             for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
-              helm install validator-$i ./helm/ --values ./helm/values.yaml --set image.repository=${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i
+              helm install validator-$i ./helm/ --values ./helm/values.yaml --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-$i
             done;
           else
             echo "No validator is mentioned to deploy"
           fi
-#          if [ "$VALIDATOR" == "Yes" ]; then
-#            for i in {1 ..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
-#              if [ $i -eq 1 ]; then
-#                sed -i 's/IMAGE_NAME/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i/g' validator.yml
-#                sed -i 's/DEPLOYMENT_NAME/validator-$i/g' validator.yml
-#                kubectl apply -f validator.yml
-#                kubectl get all
-#              else
-#                sed -i 's/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-"$i"-1/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-"$i"/g' validator.yml
-#                sed -i 's/validator-"$i"-1/validator-"$i"/g' validator.yml
-#                kubectl apply -f validator.yml
-#                kubectl get all
-#            done;
-#          else
-#            echo "No validator is mentioned to deploy"
-#          fi
-#          for i in {1 ..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
-#            sed -i 's/IMAGE_NAME/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i/g' validator.yml
-#            sed -i 's/DEPLOYMENT_NAME/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i/g' validator.yml
-#            kubectl apply -f validator.yml
-#            kubectl get all
-#          sed -i 's/IMAGE_NAME/${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}/g' validator.yml
