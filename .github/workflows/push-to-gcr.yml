@@ -88,22 +88,6 @@ jobs:
           else
             echo "No validator is mentioned to deploy"
           fi
-#              docker/build-push-action@v5
-#                with:
-#                  context: .
-#                  file: Dockerfile-validator-1
-#                  push: true
-#                  tags: ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i
-#                  build-args: |
-#                    KEY=$i
-        
-#      - name: Build & push
-#        uses: docker/build-push-action@v5
-#        with:
-#          context: .
-#          file: Dockerfile-validator-1
-#          push: true
-#          tags: ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}
 
       - name: Configure kubectl
         uses: azure/setup-kubectl@v1
@@ -116,9 +100,21 @@ jobs:
           gcloud auth list
           gcloud components install gke-gcloud-auth-plugin
           gcloud container clusters get-credentials cssp --region asia-south1 --project cssp-dhiway
-        
-#      - name: Deploy to GKE
-#        run: |
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: 'v3.0.0'
+
+      - name: Deploy to GKE
+        run: |
+          if [ "$VALIDATOR" == "Yes" ]; then
+            for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
+              helm install validator-$i ./helm/ --values ./helm/values.yml --set image.repository=${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i
+            done;
+          else
+            echo "No validator is mentioned to deploy"
+          fi
 #          if [ "$VALIDATOR" == "Yes" ]; then
 #            for i in {1 ..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
 #              if [ $i -eq 1 ]; then
