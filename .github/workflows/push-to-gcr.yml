@@ -19,9 +19,9 @@ env:
   
 jobs:
   build-push:
-    strategy:
-      matrix:
-        username: [Somnath,Pandey]
+#    strategy:
+#      matrix:
+#        username: [Somnath,Pandey]
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -33,9 +33,9 @@ jobs:
           CURRENT_DATETIME=$(date +'%Y-%d-%m-%H-%M')
           echo "CURRENT_DATETIME=$CURRENT_DATETIME" >> $GITHUB_ENV
       
-      - name: Testing loop
-        run: |-
-          echo "Hello, ${{ matrix.username }}"
+#      - name: Testing loop
+#        run: |-
+#          echo "Hello, ${{ matrix.username }}"
           
       - name: Set vars
         run: echo "IMAGE_TAG=$REGION-docker.pkg.dev/$PROJECT/$REPO/$IMAGE" >> $GITHUB_ENV
@@ -110,7 +110,7 @@ jobs:
         run: |
           if [ "$VALIDATOR" == "Yes" ]; then
             for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
-              helm install validator-$i ./helm/ --values ./helm/values.yml --set image.repository=${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i
+              helm install validator-$i ./helm/ --values ./helm/values.yaml --set image.repository=${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-$i
             done;
           else
             echo "No validator is mentioned to deploy"
