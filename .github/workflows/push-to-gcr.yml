@@ -113,9 +113,9 @@ jobs:
             for i in {${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}..${{ env.BOOT_NODE_ENDING_KEY_NUMBER }}}; do
               helm install ${{ env.IMAGE }}-validator-$i ./helm/ --values ./helm/values.yaml --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-boot-node-$i
               sleep 5
-              BOOT_NODE_$i_POD_NAME=$(kubectl get pods | grep boot-node-$i | awk '{print $1}')
-              echo "$BOOT_NODE_$i_POD_NAME"
-              BOOT_NODE_LOCAL_ID_$i=$(kubectl logs $BOOT_NODE_$i_POD_NAME | grep -i "Local node identity" | awk '{print $8}')
+              BOOT_NODE_POD_NAME_$i=$(kubectl get pods | grep boot-node-$i | awk '{print $1}')
+              echo "$BOOT_NODE_POD_NAME_$i"
+              BOOT_NODE_LOCAL_ID_$i=$(kubectl logs $BOOT_NODE_POD_NAME_$i | grep -i "Local node identity" | awk '{print $8}')
               echo "$BOOT_NODE_LOCAL_ID_$i"
               echo "BOOT_NODE_LOCAL_IDENTITY_$i=$BOOT_NODE_LOCAL_ID_$i" >> $GITHUB_ENV
             done;
