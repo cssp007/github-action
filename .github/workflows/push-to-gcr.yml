@@ -115,10 +115,10 @@ jobs:
               sleep 5
               BOOT_NODE_POD_NAME_$i=$(kubectl get pods | grep boot-node-$i | awk '{print $1}')
               echo "BOOT_NODE_POD_NAME_$i=${BOOT_NODE_POD_NAME_$i}" >> $GITHUB_ENV
-              echo "${{ env['BOOT_NODE_POD_NAME_' !!str i] }}"
+              echo "$BOOT_NODE_POD_NAME_$i"
               BOOT_NODE_LOCAL_ID_$i=$(kubectl logs ${BOOT_NODE_POD_NAME_$i} | grep -i "Local node identity" | awk '{print $8}')
               echo "BOOT_NODE_LOCAL_ID_$i=${BOOT_NODE_LOCAL_ID_$i}" >> $GITHUB_ENV
-              echo "${{ env['BOOT_NODE_LOCAL_ID_' !!str i] }}"
+              echo "$BOOT_NODE_LOCAL_ID_$i"
             done
           else
             echo "No boot nodes are mentioned to deploy"
