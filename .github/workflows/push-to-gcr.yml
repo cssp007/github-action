@@ -16,7 +16,7 @@ env:
   NUMBERS_OF_AUTHORISED_NODES: 8
   VALIDATOR: Yes
   RPC: No
-  BOOT_NODE: No
+  BOOT_NODE: Yes
   NUMBER_OF_VALIDATOR_NODES: 3
   RPC_STARTING_KEY_NUMBER: 4
   RPC_ENDING_KEY_NUMBER: 5
@@ -128,16 +128,16 @@ jobs:
           TOTAL_NUMBER_OF_BOOT_NODES=$(($BOOT_NODE_ENDING_KEY_NUMBER - $BOOT_NODE_STARTING_KEY_NUMBER + 1))
           if [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 1 ]; then
             BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
+            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}"\]/g' ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
           elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 2 ]; then
             BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
             BOOT_NODE_LOCAL_IDENTITY_2=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
+            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}"\]/g' ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
           elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 3 ]; then
             BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
             BOOT_NODE_LOCAL_IDENTITY_2=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1
             BOOT_NODE_LOCAL_IDENTITY_3=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+2
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_3 }}"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
+            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_3 }}"\]/g' ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
           else
             echo "No need to update spec file.."
           fi
