@@ -123,24 +123,20 @@ jobs:
           
       - name: Building and pushing Docker images for other nodes to GCR
         run: |
-          TOTAL_NUMBER_OF_BOOT_NODES=$BOOT_NODE_ENDING_KEY_NUMBER-$BOOT_NODE_STARTING_KEY_NUMBER+1
+          TOTAL_NUMBER_OF_BOOT_NODES=$(($BOOT_NODE_ENDING_KEY_NUMBER - $BOOT_NODE_STARTING_KEY_NUMBER + 1))
           if [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 1 ]; then
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }} }}"\]/g' ./cord/scripts/cssp-raw-spec.json
+            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }} }}"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
           elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 2 ]; then
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1"\]/g' ./cord/scripts/cssp-raw-spec.json
+            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
           elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 3 ]; then
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+2"\]/g' ./cord/scripts/cssp-raw-spec.json
-          elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 4 ]; then
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/xyz","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/abc"\]/g' ./cord/scripts/cssp-raw-spec.json
-          elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 5 ]; then
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/xyz","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/abc"\]/g' ./cord/scripts/cssp-raw-spec.json
+            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+2"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
           else
             echo "No need to update spec file.."
           fi
           
           if [ "$VALIDATOR" == "Yes" ]; then
             for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do 
-              docker build -t ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-validator-$i --build-arg KEY=$i .
+              docker build -t ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-validator-$i --build-arg KEY=$i --build-arg SPEC_FOLDER_NAME=$SPEC_FOLDER_NAME .
               docker push ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-validator-$i
             done;
           else
