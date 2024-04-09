@@ -22,6 +22,8 @@ env:
   RPC_ENDING_KEY_NUMBER: 5
   BOOT_NODE_STARTING_KEY_NUMBER: 6
   BOOT_NODE_ENDING_KEY_NUMBER: 7
+  BOOT_NODE_LOCAL_IDENTITY_1: 6
+  BOOT_NODE_LOCAL_IDENTITY_2: 7
   
 jobs:
   build-push:
@@ -116,26 +118,30 @@ jobs:
               BOOT_NODE_LOCAL_ID_$i=$(kubectl logs $BOOT_NODE_$i_POD_NAME | grep -i "Local node identity" | awk '{print $8}')
               echo "$BOOT_NODE_LOCAL_ID_$i"
               echo "BOOT_NODE_LOCAL_IDENTITY_$i=$BOOT_NODE_LOCAL_ID_$i" >> $GITHUB_ENV
-              
-              TOTAL_NUMBER_OF_BOOT_NODES=$(($BOOT_NODE_ENDING_KEY_NUMBER - $BOOT_NODE_STARTING_KEY_NUMBER + 1))
-              boot_node_local_identity="${{ env.BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }} }}"
-              echo "Nested variable: $boot_node_local_identity"
-              if [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 1 ]; then
-                sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/$boot_node_local_identity"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
-              elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 2 ]; then
-                sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/$boot_node_local_identity","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/$boot_node_local_identity+1"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
-              elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 3 ]; then
-                sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/$boot_node_local_identity","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/$boot_node_local_identity+1","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/$boot_node_local_identity+2"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
-              else
-                echo "No need to update spec file.."
-              fi
             done;
           else
             echo "No boot nodes are mentioned to deploy"
           fi
           
       - name: Building and pushing Docker images for other nodes to GCR
-        run: |          
+        run: |
+          TOTAL_NUMBER_OF_BOOT_NODES=$(($BOOT_NODE_ENDING_KEY_NUMBER - $BOOT_NODE_STARTING_KEY_NUMBER + 1))
+          if [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 1 ]; then
+            BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
+            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
+          elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 2 ]; then
+            BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
+            BOOT_NODE_LOCAL_IDENTITY_2=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1
+            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
+          elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 3 ]; then
+            BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
+            BOOT_NODE_LOCAL_IDENTITY_2=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1
+            BOOT_NODE_LOCAL_IDENTITY_3=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+2
+            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_3 }}"\]/g' ./scripts/$SPEC_FOLDER_NAME-raw-spec.json
+          else
+            echo "No need to update spec file.."
+          fi
+          
           if [ "$VALIDATOR" == "Yes" ]; then
             for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do 
               docker build -t ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-validator-$i --build-arg KEY=$i --build-arg SPEC_FOLDER_NAME=$SPEC_FOLDER_NAME .
