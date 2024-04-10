@@ -106,5 +106,5 @@ tolerations: []
 
 affinity: {}
 
-Validator:
+validator:
   enabled: false
