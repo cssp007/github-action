@@ -105,3 +105,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+Validator:
+  enabled: false
