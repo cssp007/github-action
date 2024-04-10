@@ -50,7 +50,7 @@ spec:
             - "--prometheus-external"
             - "--listen-addr"
             - "/ip4/0.0.0.0/tcp/30333"
-            {{- if .Values.Validator.enabled -}}
+            {{- if .Values.validator.enabled -}}
             - "--validator"
             - "--pruning=archive"
             - "--port"
