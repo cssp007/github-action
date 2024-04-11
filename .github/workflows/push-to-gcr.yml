@@ -166,7 +166,7 @@ jobs:
         run: |
           if [ "$VALIDATOR" == "Yes" ]; then
             for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
-              helm install ${{ env.IMAGE }}-validator-$i ./helm/ --values ./helm/values.yaml --set validator.enabled=true --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-validator-$i
+              helm install ${{ env.IMAGE }}-validator-$i ./helm/ --values ./helm/values.yaml --set validator.enabled=true --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-validator-$i --set rawSpec=$SPEC_FOLDER_NAME-raw-spec.json --set nodeKey=node$i.key
             done;
           else
             echo "No validator is mentioned to deploy"
