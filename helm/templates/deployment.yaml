@@ -57,7 +57,7 @@ spec:
           - "/cord/{{ .Values.rawSpec }}"
           - "--node-key-file"
           - "/cord/{{ .Values.nodeKey }}"
-          - "-prometheus-port"
+          - "--prometheus-port"
           - "9615"
           - "--rpc-cors"
           - "all"
