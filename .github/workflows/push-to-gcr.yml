@@ -111,7 +111,7 @@ jobs:
         run: |
           if [ "$BOOT_NODE" == "Yes" ]; then
             for i in {${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}..${{ env.BOOT_NODE_ENDING_KEY_NUMBER }}}; do
-              helm install ${{ env.IMAGE }}-boot-node-$i ./helm/ --values ./helm/values.yaml --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-boot-node-$i
+              helm install ${{ env.IMAGE }}-boot-node-$i ./helm/ --values ./helm/values.yaml --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-boot-node-$i --set rawSpec=$SPEC_FOLDER_NAME-raw-spec.json --set nodeKey=node$i.key
               sleep 5
               echo "BOOT_NODE_POD_NAME_$i=$(kubectl get pods | grep boot-node-$i | awk '{print $1}')" >> $GITHUB_ENV
               echo "$BOOT_NODE_POD_NAME_$i"          
