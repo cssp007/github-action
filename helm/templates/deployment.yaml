@@ -36,29 +36,6 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args:
-            - "--base-path"
-            - "/cord/"
-            - "--chain"
-            - "/cord/{{ .Values.rawSpec }}"
-            - "--node-key-file"
-            - "/cord/{{ .Values.nodeKey }}"
-            - "-prometheus-port"
-            - "9615"
-            - "--rpc-cors"
-            - "all"
-            - "--prometheus-external"
-            - "--listen-addr"
-            - "/ip4/0.0.0.0/tcp/30333"
-            {{- if .Values.validator.enabled -}}
-            - "--validator"
-            - "--pruning=archive"
-            - "--port"
-            - "30333"
-            - "--rpc-port"
-            - "9933"
-            - "--rpc-methods=Safe"
-            {{ end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -73,6 +50,20 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          args:
+          - "--base-path"
+          - "/cord/"
+          - "--chain"
+          - "/cord/{{ .Values.rawSpec }}"
+          - "--node-key-file"
+          - "/cord/{{ .Values.nodeKey }}"
+          - "-prometheus-port"
+          - "9615"
+          - "--rpc-cors"
+          - "all"
+          - "--prometheus-external"
+          - "--listen-addr"
+          - "/ip4/0.0.0.0/tcp/30333"
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
