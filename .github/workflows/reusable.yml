@@ -17,7 +17,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    uses: cssp007/github-action/.github/workflows/push-to-gcr.yml@main
+    uses: cssp007/github-action/.github/workflows/secrets-in-gcp.yaml@main
     with:
       SERVICE_NAME: ${{ env.SERVICE_NAME }}
     secrets:
