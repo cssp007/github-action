@@ -1,21 +1,41 @@
-apiVersion: apps/v1
-kind: Deployment
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: DEPLOYMENT_NAME-deployment
-  labels:
-    app: DEPLOYMENT_NAME
+  name: my-pvc
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: DEPLOYMENT_NAME
-  template:
-    metadata:
-      labels:
-        app: DEPLOYMENT_NAME
-    spec:
-      containers:
-      - name: DEPLOYMENT_NAME
-        image: IMAGE_NAME
-        ports:
-        - containerPort: 30333
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: download-and-mount-pod
+spec:
+  initContainers:
+    - name: init-container
+      image: google/cloud-sdk:latest
+      command: ["sh", "-c", "gsutil cp -r gs://gke-testing-007/testing/* /tmp/"]
+      volumeMounts:
+        - name: downloaded-file
+          mountPath: /data
+  containers:
+    - name: user-container
+      image: alpine:latest
+      command: ["sh", "-c", "ls -lh /tmp/"]
+      volumeMounts:
+        - name: downloaded-file
+          mountPath: /data
+        - name: shared-data
+          mountPath: /shared
+  volumes:
+    - name: downloaded-file
+      emptyDir: {}
+    - name: shared-data
+      persistentVolumeClaim:
+        claimName: my-pvc
