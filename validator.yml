@@ -47,14 +47,14 @@ spec:
         - name: init-script
           mountPath: /tmp
       containers:
-      - image: alpine:latest
-        command: ["sh", "-c", "ls -lh /tmp/"]
+      - image: asia-south1-docker.pkg.dev/cssp-dhiway/main/sparknet:2024-11-04-12-54-boot-node-7
+        command: ["sh", "-c", "ls -lh /cord/"]
         name: mysql
         volumeMounts:
         - name: data
           mountPath: /mnt
         - name: init-script
-          mountPath: /tmp
+          mountPath: /cord
       volumes:
       - name: init-script
         persistentVolumeClaim:
