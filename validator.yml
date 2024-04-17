@@ -24,6 +24,8 @@ spec:
       volumeMounts:
         - name: downloaded-file
           mountPath: /data
+        - name: shared-data
+          mountPath: /shared
   containers:
     - name: user-container
       image: alpine:latest
