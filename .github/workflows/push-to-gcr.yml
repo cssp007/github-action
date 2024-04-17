@@ -79,8 +79,8 @@ jobs:
       - name: Upload nodes key to GCS
         run: gsutil -m cp -r ./cord/scripts/* gs://gke-testing-007/testing/
         
-      - name: Delete unwated files
-        run: gsutil rm gs://gke-testing-007/testing/gha-creds-*.json
+#      - name: Delete unwated files
+#        run: gsutil rm gs://gke-testing-007/testing/gha-creds-*.json
         
       - name: Docker auth
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
