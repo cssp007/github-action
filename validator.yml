@@ -10,34 +10,55 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: standard
-
 ---
+# this pvc will be used to store mysql database
+kind: PersistentVolumeClaim
 apiVersion: v1
-kind: Pod
 metadata:
-  name: download-and-mount-pod
+  name: mysql-data-pvc
 spec:
-  initContainers:
-    - name: init-container
-      image: google/cloud-sdk:latest
-      command: ["sh", "-c", "gsutil cp -r gs://gke-testing-007/testing/* /tmp/"]
-      volumeMounts:
-        - name: downloaded-file
-          mountPath: /data
-        - name: shared-data
-          mountPath: /shared
-  containers:
-    - name: user-container
-      image: alpine:latest
-      command: ["sh", "-c", "ls -lh /tmp/"]
-      volumeMounts:
-        - name: downloaded-file
-          mountPath: /data
-        - name: shared-data
-          mountPath: /shared
-  volumes:
-    - name: downloaded-file
-      emptyDir: {}
-    - name: shared-data
-      persistentVolumeClaim:
-        claimName: my-pvc
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: mysql-init-demo
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      initContainers:
+      - name: init-script-downloader
+        image: google/cloud-sdk:latest
+        command: ["sh", "-c", "gsutil cp -r gs://gke-testing-007/testing/* /tmp/"]
+        volumeMounts:
+        - name: init-script
+          mountPath: /tmp
+      containers:
+      - image: alpine:latest
+        command: ["sh", "-c", "ls -lh /tmp/"]
+        name: mysql
+        volumeMounts:
+        - name: data
+          mountPath: /mnt
+        - name: init-script
+          mountPath: /tmp
+      volumes:
+      - name: init-script
+        persistentVolumeClaim:
+          claimName: my-pvc
+      - name: data
+        persistentVolumeClaim:
+          claimName: mysql-data-pvc
