@@ -106,7 +106,7 @@ jobs:
         run: |-
           gcloud auth list
           gcloud components install gke-gcloud-auth-plugin
-          gcloud container clusters get-credentials cssp-testing --region asia-south1 --project cssp-dhiway
+          gcloud container clusters get-credentials cssp-testing --region asia-south1-a --project cssp-dhiway
 
       - name: Setup Helm
         uses: azure/setup-helm@v1
