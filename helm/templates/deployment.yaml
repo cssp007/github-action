@@ -30,10 +30,14 @@ spec:
       initContainers:
         - name: init-script-downloader
           image: google/cloud-sdk:latest
-          command: ["sh", "-c", "gsutil cp -r gs://gke-testing-007/testing/cssp/* /tmp/"]
+          command: 
+            - "sh"
+            - "-c"
+            - |
+              gsutil cp -r gs://gke-testing-007/testing/cssp/* /cord/ && chmod 777 -R /cord
           volumeMounts:
           - name: init-script
-            mountPath: /tmp
+            mountPath: /cord
       serviceAccountName: {{ include "cord.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
