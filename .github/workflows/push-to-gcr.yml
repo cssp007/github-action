@@ -77,7 +77,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
 
       - name: Upload nodes key to GCS
-        run: gsutil -m cp -r ./cord/scripts/* gs://gke-testing-007/testing/
+        run: gsutil -m cp -r ./cord/scripts/node*.key ./cord/scripts/accounts.txt ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json gs://gke-testing-007/testing/$SPEC_FOLDER_NAME
         
 #      - name: Delete unwated files
 #        run: gsutil rm gs://gke-testing-007/testing/gha-creds-*.json
