@@ -104,6 +104,7 @@ volumes:
 volumeMounts:
  - name: init-script
    mountPath: /cord
+   readOnly: false
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
