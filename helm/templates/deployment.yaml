@@ -30,7 +30,7 @@ spec:
       initContainers:
         - name: init-script-downloader
           image: google/cloud-sdk:latest
-          command: ["sh", "-c", "gsutil cp -r gs://gke-testing-007/testing/* /tmp/"]
+          command: ["sh", "-c", "gsutil cp -r gs://gke-testing-007/testing/cssp/* /tmp/"]
           volumeMounts:
           - name: init-script
             mountPath: /tmp
