@@ -59,11 +59,11 @@ spec:
           {{- end }}
           args:
           - "--base-path"
-          - "/cord/"
+          - "/mnt/"
           - "--chain"
-          - "/cord/{{ .Values.rawSpec }}"
+          - "/mnt/{{ .Values.rawSpec }}"
           - "--node-key-file"
-          - "/cord/{{ .Values.nodeKey }}"
+          - "/mnt/{{ .Values.nodeKey }}"
           - "--prometheus-port"
           - "9615"
           - "--rpc-cors"
