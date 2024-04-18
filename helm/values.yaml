@@ -103,7 +103,7 @@ volumes:
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts:
  - name: init-script
-   mountPath: /cord
+   mountPath: /mnt
    readOnly: false
 # - name: foo
 #   mountPath: "/etc/foo"
