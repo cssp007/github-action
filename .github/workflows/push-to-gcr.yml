@@ -128,60 +128,60 @@ jobs:
             echo "No boot nodes are mentioned to deploy"
           fi
           
-      - name: Building and pushing Docker images for other nodes to GCR
-        run: |
-          TOTAL_NUMBER_OF_BOOT_NODES=$(($BOOT_NODE_ENDING_KEY_NUMBER - $BOOT_NODE_STARTING_KEY_NUMBER + 1))
-          if [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 1 ]; then
-            BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}"\]/g' ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
-            head ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
-          elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 2 ]; then
-            BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
-            BOOT_NODE_LOCAL_IDENTITY_2=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}"\]/g' ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
-            head ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
-          elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 3 ]; then
-            BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
-            BOOT_NODE_LOCAL_IDENTITY_2=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1
-            BOOT_NODE_LOCAL_IDENTITY_3=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+2
-            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_3 }}"\]/g' ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
-            head ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
-          else
-            echo "No need to update spec file.."
-          fi
+#      - name: Building and pushing Docker images for other nodes to GCR
+#        run: |
+#          TOTAL_NUMBER_OF_BOOT_NODES=$(($BOOT_NODE_ENDING_KEY_NUMBER - $BOOT_NODE_STARTING_KEY_NUMBER + 1))
+#          if [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 1 ]; then
+#            BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
+#            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}"\]/g' ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
+#            head ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
+#          elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 2 ]; then
+#            BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
+#            BOOT_NODE_LOCAL_IDENTITY_2=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1
+#            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}"\]/g' ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
+#            head ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
+#          elif [ "$TOTAL_NUMBER_OF_BOOT_NODES" == 3 ]; then
+#            BOOT_NODE_LOCAL_IDENTITY_1=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}
+#            BOOT_NODE_LOCAL_IDENTITY_2=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+1
+#            BOOT_NODE_LOCAL_IDENTITY_3=BOOT_NODE_LOCAL_IDENTITY_${{ env.BOOT_NODE_STARTING_KEY_NUMBER }}+2
+#            sed -i 's/"bootNodes": \[\]/"bootNodes": \["\/ip4\/10.1.1.1\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_1 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_2 }}","\/ip4\/1.0.0.0\/tcp\/30333\/p2p\/${{ env.BOOT_NODE_LOCAL_IDENTITY_3 }}"\]/g' ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
+#            head ./cord/scripts/$SPEC_FOLDER_NAME-raw-spec.json
+#          else
+#            echo "No need to update spec file.."
+#          fi
           
-          if [ "$VALIDATOR" == "Yes" ]; then
-            for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do 
-              docker build -t ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-validator-$i --build-arg KEY=$i --build-arg SPEC_FOLDER_NAME=$SPEC_FOLDER_NAME .
-              docker push ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-validator-$i
-            done;
-          else
-            echo "No validator nodes are mentioned to deploy"
-          fi
+#          if [ "$VALIDATOR" == "Yes" ]; then
+#            for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do 
+#              docker build -t ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-validator-$i --build-arg KEY=$i --build-arg SPEC_FOLDER_NAME=$SPEC_FOLDER_NAME .
+#              docker push ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-validator-$i
+#            done;
+#          else
+#            echo "No validator nodes are mentioned to deploy"
+#          fi
 
-          if [ "$RPC" == "Yes" ]; then
-            for i in {${{ env.RPC_STARTING_KEY_NUMBER }}..${{ env.RPC_ENDING_KEY_NUMBER }}}; do
-              docker build -t ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-rpc-$i --build-arg KEY=$i .
-              docker push ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-rpc-$i
-            done;
-          else
-            echo "No RPC nodes are mentioned to deploy"
-          fi
+#          if [ "$RPC" == "Yes" ]; then
+#            for i in {${{ env.RPC_STARTING_KEY_NUMBER }}..${{ env.RPC_ENDING_KEY_NUMBER }}}; do
+#              docker build -t ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-rpc-$i --build-arg KEY=$i .
+#              docker push ${{ env.IMAGE_TAG }}:${{ env.CURRENT_DATETIME }}-rpc-$i
+#            done;
+#          else
+#            echo "No RPC nodes are mentioned to deploy"
+#          fi
 
-      - name: Deploy other nodes to GKE
-        run: |
-          if [ "$VALIDATOR" == "Yes" ]; then
-            for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
-              helm install ${{ env.IMAGE }}-validator-$i ./helm/ --values ./helm/values.yaml --set validator.enabled=true --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-validator-$i --set rawSpec=$SPEC_FOLDER_NAME-raw-spec.json --set nodeKey=node$i.key
-            done;
-          else
-            echo "No validator is mentioned to deploy"
-          fi
+#      - name: Deploy other nodes to GKE
+#        run: |
+#          if [ "$VALIDATOR" == "Yes" ]; then
+#            for i in {1..${{ env.NUMBER_OF_VALIDATOR_NODES }}}; do
+#              helm install ${{ env.IMAGE }}-validator-$i ./helm/ --values ./helm/values.yaml --set validator.enabled=true --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-validator-$i --set rawSpec=$SPEC_FOLDER_NAME-raw-spec.json --set nodeKey=node$i.key
+#            done;
+#          else
+#            echo "No validator is mentioned to deploy"
+#          fi
 
-          if [ "$RPC" == "Yes" ]; then
-            for i in {${{ env.RPC_STARTING_KEY_NUMBER }}..${{ env.RPC_ENDING_KEY_NUMBER }}}; do
-              helm install ${{ env.IMAGE }}-rpc-$i ./helm/ --values ./helm/values.yaml --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-rpc-$i
-            done;
-          else
-            echo "No validator is mentioned to deploy"
-          fi
+#          if [ "$RPC" == "Yes" ]; then
+#            for i in {${{ env.RPC_STARTING_KEY_NUMBER }}..${{ env.RPC_ENDING_KEY_NUMBER }}}; do
+#              helm install ${{ env.IMAGE }}-rpc-$i ./helm/ --values ./helm/values.yaml --set image.repository=${{ env.IMAGE_TAG }} --set image.tag=${{ env.CURRENT_DATETIME }}-rpc-$i
+#            done;
+#          else
+#            echo "No validator is mentioned to deploy"
+#          fi
