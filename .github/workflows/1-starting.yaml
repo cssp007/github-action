@@ -1,6 +1,5 @@
-name: CI Pipeline
+name: learing github pipeline
 
-## trigger pipeline based on the requirement
 on:
   workflow_dispatch:
     inputs:
@@ -25,22 +24,11 @@ on:
         description: 'Environment to run tests against'
         type: environment
         required: true
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - develop
-  schedule:
-    - cron: "5 * * * *"
-#### -------- End trigger --------- ####
+
 jobs:
-  build:
+  print-tag:
     runs-on: ubuntu-latest
-
+    if: ${{ inputs.print_tags }} 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Print Message
-        run: echo "Hello GitHub Actions"
+      - name: Print the input tag to STDOUT
+        run: echo  The tags are ${{ inputs.tags }} 
