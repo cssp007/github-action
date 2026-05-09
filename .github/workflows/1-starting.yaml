@@ -1,48 +1,15 @@
-name: learing github pipeline
+name: CI Pipeline
+
+run-name: Build for ${{ github.ref_name }}
 
 on:
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-          - info
-          - warning
-          - debug
-      print_tags:
-        description: 'True to print to STDOUT'
-        required: true
-        type: boolean
-      tags:
-        description: 'Test scenario tags'
-        required: true
-        type: string
-      environment:
-        description: 'Environment to run tests against'
-        type: choice
-        required: true
-        options:
-          - dev
-          - qa
-          - uat
+  push:
+    branches:
+      - main
 
 jobs:
-  print-tag:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print the input tag to STDOUT
-        run: echo  The tags are ${{ inputs.tags }} in ${{ inputs.environment }}
-  print:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print the input tag to STDOUT
-        run: echo  The tags are ${{ inputs.tags }} in ${{ inputs.environment }}
   build:
     runs-on: ubuntu-latest
-    needs: [ print-tag, print ]
+
     steps:
-      - name: Build
-        run: echo  hello world
+      - run: echo "Building..."
