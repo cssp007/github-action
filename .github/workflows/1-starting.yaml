@@ -1,6 +1,9 @@
 name: CI Pipeline
 
-run-name: Build for Somnath Pandey
+env:
+  ENV: Dev
+
+run-name: Deploy from ${{ github.ref_name }} by @${{ github.actor }} in $ENV
 
 on:
   push:
