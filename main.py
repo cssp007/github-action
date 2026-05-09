@@ -7,5 +7,5 @@ app.config['SECRET_KEY'] = os.urandom(24)
 @app.route("/", methods=["GET"])
 def login():
     return render_template('login.html', title='login')
-
+# Calling the application
 app.run(debug=True)
