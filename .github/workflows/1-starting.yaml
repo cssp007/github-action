@@ -3,7 +3,7 @@ name: CI Pipeline
 env:
   ENV: Dev
 
-run-name: Deploy from ${{ github.ref_name }} by @${{ github.actor }} in ${{ env.ENV }}
+run-name: Deploy from ${{ github.ref_name }} by @${{ github.actor }} in ${{ vars.ENV }}
 
 on:
   push:
