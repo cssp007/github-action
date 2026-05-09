@@ -1,6 +1,6 @@
 name: CI Pipeline
 
-run-name: Build for ${{ github.ref_name }}
+run-name: Build for Somnath Pandey
 
 on:
   push:
