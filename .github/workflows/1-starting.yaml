@@ -1,17 +1,18 @@
-name: Label Created Workflow
+name: Issue Events Workflow
 
 on:
-  label:
+  issues:
     types:
-      - created
+      - opened
+      - labeled
 
 jobs:
-  print-label:
+  issue-job:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print label details
+      - name: Print issue information
         run: |
-          echo "New label created"
-          echo "Label name: ${{ github.event.label.name }}"
-          echo "Label color: ${{ github.event.label.color }}"
+          echo "Issue Title: ${{ github.event.issue.title }}"
+          echo "Issue Number: ${{ github.event.issue.number }}"
+          echo "Action Type: ${{ github.event.action }}"
