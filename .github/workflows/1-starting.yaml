@@ -1,15 +1,17 @@
-name: CI Pipeline
-
-run-name: Deploy from ${{ github.ref_name }} by @${{ github.actor }} in ${{ vars.ENV }}
+name: Label Created Workflow
 
 on:
-  push:
-    branches:
-      - main
+  label:
+    types:
+      - created
 
 jobs:
-  build:
+  print-label:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo "Building successfully..."
+      - name: Print label details
+        run: |
+          echo "New label created"
+          echo "Label name: ${{ github.event.label.name }}"
+          echo "Label color: ${{ github.event.label.color }}"
