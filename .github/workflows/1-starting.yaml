@@ -20,8 +20,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::123456789012:role/github-oidc-role
-          aws-region: ap-south-1
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: ap-south-2
 
       - name: Verify Identity
         run: aws sts get-caller-identity
@@ -31,5 +31,3 @@ jobs:
       - run: terraform init
 
       - run: terraform plan
-
-      - run: terraform apply -auto-approve
