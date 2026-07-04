@@ -80,17 +80,3 @@ resource "aws_security_group" "sonarQ_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-resource "aws_instance" "sonarQ_instance" {
-  ami           = "ami-03a933af70fa97ad2"
-  instance_type = "t2.medium"
-  key_name      = "cssp"
-
-  subnet_id                   = aws_subnet.terraform_public_subnet.id
-  vpc_security_group_ids      = [aws_security_group.sonarQ_sg.id]
-  associate_public_ip_address = true
-
-  tags = {
-    "Name" : "SonarQ Server"
-  }
-}
