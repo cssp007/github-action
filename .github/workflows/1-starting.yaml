@@ -1,18 +1,35 @@
-name: Issue Events Workflow
+name: Terraform Deploy
 
 on:
-  issues:
-    types:
-      - opened
-      - labeled
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-  issue-job:
+  terraform:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print issue information
-        run: |
-          echo "Issue Title: ${{ github.event.issue.title }}"
-          echo "Issue Number: ${{ github.event.issue.number }}"
-          echo "Action Type: ${{ github.event.action }}"
+
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/github-oidc-role
+          aws-region: ap-south-1
+
+      - name: Verify Identity
+        run: aws sts get-caller-identity
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - run: terraform init
+
+      - run: terraform plan
+
+      - run: terraform apply -auto-approve
