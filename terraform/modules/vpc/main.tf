@@ -37,9 +37,7 @@ resource "aws_eip" "eip" {
 }
 
 resource "aws_nat_gateway" "nat" {
-    for_each = var.private_subnets
     allocation_id = aws_eip.eip.id
-    subnet_id = aws_subnet.vpc_private_subnet[each.value].id
 
     depends_on = [ aws_internet_gateway.igw ]
 }
